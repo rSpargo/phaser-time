@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import Bullet from './Bullet';
+import Enemy from './Enemy';
 
 export default class Gameplay extends Phaser.Scene {
 
@@ -46,6 +47,22 @@ export default class Gameplay extends Phaser.Scene {
       classType: Bullet
     });
 
+		this.liveEnemies = this.physics.add.group();
+		this.liveEnemies.createMultiple({
+			frameQuantity: 10,
+			key: 'enemy',
+			active: true,
+			visible: true,
+			classType: Enemy,
+			setXY: {
+				x: 50,
+				y: 50,
+				stepX: 76
+			}
+		});
+
+		this.physics.add.overlap(this.bullets, this.liveEnemies, this.killEnemy, undefined, this);
+
 		this.cursors = this.input.keyboard?.createCursorKeys();
 		this.fireButton = this.input.keyboard?.addKey(
       Phaser.Input.Keyboard.KeyCodes.Z
@@ -71,4 +88,8 @@ export default class Gameplay extends Phaser.Scene {
 			this.fireEnabled = true;
 		}
   }
+
+	killEnemy(bullet: any, enemy: any) {
+		// add code here lol
+	}
 }
