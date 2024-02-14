@@ -28,43 +28,43 @@ export default class Gameplay extends Phaser.Scene {
   create() {
     this.add.image(400, 300, 'sky');
     this.player = this.add.triangle();
-		this.player.setFillStyle(0xffffff);
-		this.player.setStrokeStyle(5, 0x028ffd);
-		this.player.setScale(0.5);
-		this.player.setPosition(
-			this.cameras.main.centerX, 
-			this.cameras.main.displayHeight - (this.player.height / 2)
-		);
-		this.physics.add.existing(this.player);
-		this.player.body.setCollideWorldBounds(true);
+    this.player.setFillStyle(0xffffff);
+    this.player.setStrokeStyle(5, 0x028ffd);
+    this.player.setScale(0.5);
+    this.player.setPosition(
+      this.cameras.main.centerX,
+      this.cameras.main.displayHeight - this.player.height / 2
+    );
+    this.physics.add.existing(this.player);
+    this.player.body.setCollideWorldBounds(true);
 
-		this.bullets = this.physics.add.group({runChildUpdate: true});
-		this.bullets.createMultiple({
+    this.bullets = this.physics.add.group({ runChildUpdate: true });
+    this.bullets.createMultiple({
       frameQuantity: 20,
       key: 'bullet',
       active: false,
       visible: false,
-      classType: Bullet
+      classType: Bullet,
     });
 
-		this.liveEnemies = this.physics.add.group();
-		this.liveEnemies.createMultiple({
-			frameQuantity: 10,
-			key: 'enemy',
-			active: true,
-			visible: true,
-			classType: Enemy,
-			setXY: {
-				x: 50,
-				y: 50,
-				stepX: 76
-			}
-		});
+    this.liveEnemies = this.physics.add.group();
+    this.liveEnemies.createMultiple({
+      frameQuantity: 10,
+      key: 'enemy',
+      active: true,
+      visible: true,
+      classType: Enemy,
+      setXY: {
+        x: 50,
+        y: 50,
+        stepX: 76,
+      },
+    });
 
-		this.physics.add.overlap(this.bullets, this.liveEnemies, this.killEnemy, undefined, this);
+    // this.physics.add.overlap(this.bullets, this.liveEnemies, this.killEnemy, undefined, this);
 
-		this.cursors = this.input.keyboard?.createCursorKeys();
-		this.fireButton = this.input.keyboard?.addKey(
+    this.cursors = this.input.keyboard?.createCursorKeys();
+    this.fireButton = this.input.keyboard?.addKey(
       Phaser.Input.Keyboard.KeyCodes.Z
     );
   }
@@ -90,6 +90,9 @@ export default class Gameplay extends Phaser.Scene {
   }
 
 	killEnemy(bullet: any, enemy: any) {
-		// add code here lol
+		console.log('IVE BEEN SHOT 💥');
+
+    this.bullets.killAndHide(bullet);
+    this.liveEnemies.remove(enemy, true);
 	}
 }
